@@ -2,24 +2,24 @@ import './App.css';
 import Employee from './components/Employee';
 
 function App() {
+  console.log('We are bout to show the employee');
+  const showEmployees = false;
   return (
     <div className="App">
-      <header className="App-header">
+      {console.log('inside the return')}
+      {showEmployees ? (
+        <>
         <Employee/>
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <Employee/>
+        <Employee/>
+        <Employee/>
+        <Employee/>
+        <Employee/> 
+        </>
+      ): (
+        <p> You Cannot see the Employees</p>
+      )} 
     </div>
   );
 }
-
 export default App;
