@@ -55,6 +55,19 @@ function App() {
       img: "https://s3.tebi.io/digitrader/assets/images/team/member4.jpg",
     },
   ]);
+
+  function updateEmployee(id, newName, newRole) {
+    const updateEmployees = employees.map((employee) => {
+      if (id == employee.id) {
+        return { ...employee, name: newName, role: newRole };
+      }
+
+      return employee;
+    });
+    setEmployees(updateEmployees);
+    console.log("updateEmployee inside of the app.js");
+  }
+
   const showEmployees = true;
   return (
     <div className="App">
@@ -72,10 +85,12 @@ function App() {
             {employees.map((employee) => {
               return (
                 <Employee
-                  key={uuidv4()}
+                  key={employee.id}
+                  id={employee.id}
                   name={employee.name}
                   role={employee.role}
                   img={employee.img}
+                  updateEmployee={updateEmployee}
                 />
               );
             })}

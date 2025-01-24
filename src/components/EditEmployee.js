@@ -1,8 +1,12 @@
+import { upload } from "@testing-library/user-event/dist/upload";
 import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
-function EditEmployee() {
+function EditEmployee(props) {
+  const [name, setName] = useState(props.name);
+  const [role, setRole] = useState(props.role);
+
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -27,7 +31,17 @@ function EditEmployee() {
           <Modal.Title>Update Employee</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form id="editModal" className="w-full max-w-sm">
+          <form
+            onSubmit={(e) => {
+              handleClose();
+              e.preventDefault();
+              console.log("hello from here");
+              console.log(props.id, name, role);
+              props.updateEmployee(props.id, name, role);
+            }}
+            id="editModal"
+            className="w-full max-w-sm"
+          >
             <div className="md:flex md:items-center mb-6">
               <div className="md:w-1/3">
                 <label
@@ -42,7 +56,10 @@ function EditEmployee() {
                   className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
                   id="name"
                   type="text"
-                  value="Jane Doe"
+                  value={name}
+                  onChange={(e) => {
+                    setName(e.target.value);
+                  }}
                 />
               </div>
             </div>
@@ -60,7 +77,10 @@ function EditEmployee() {
                   className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
                   id="role"
                   type="text"
-                  value="Developer"
+                  value={role}
+                  onChange={(e) => {
+                    setRole(e.target.value);
+                  }}
                 />
               </div>
             </div>
@@ -68,13 +88,13 @@ function EditEmployee() {
         </Modal.Body>
         <Modal.Footer>
           <button
-            className="px-4 py-1 text-sm text-red-600 font-semibold rounded-full border border-red-200 hover:text-white hover:bg-slate-400 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+            className="bg-red-600 px-4 py-1 text-sm text-white font-semibold rounded-full border border-red-200 hover:text-white hover:bg-red-400 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
             onClick={handleClose}
           >
             Close
           </button>
           <button
-            className="px-4 py-1 text-sm text-purple-600 font-semibold rounded-full border border-purple-200 hover:text-white hover:bg-purple-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2"
+            className="bg-purple-600 px-4 py-1 text-sm text-white font-semibold rounded-full border border-purple-200 hover:text-white hover:bg-purple-400 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2"
             form="editModal"
           >
             {" "}
