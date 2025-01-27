@@ -19,7 +19,7 @@ function App() {
           <Route path="/" element={<Employees />} />
           <Route path="/dictionary" element={<Dictionary />} />
           <Route path="/customers" element={<Customers />} />
-          <Route path="/definition" element={<Definition />} />
+          <Route path="/definition/:search" element={<Definition />} />
         </Routes>
       </Header>
     </BrowserRouter>
