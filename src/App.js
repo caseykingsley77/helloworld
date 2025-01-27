@@ -18,9 +18,9 @@ function App() {
       <Header>
         <Routes>
           <Route path="/" element={<Employees />} />
-          <Route path="/dictionary" element={<Dictionary />} />
+          <Route path="/dictionary/" element={<Dictionary />} />
           <Route path="/customers" element={<Customers />} />
-          <Route path="/definition/:search" element={<Definition />} />
+          <Route path="/dictionary/:search" element={<Definition />} />
           <Route path="/404" element={<NotFound />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
