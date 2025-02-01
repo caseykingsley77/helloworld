@@ -1,14 +1,22 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { baseUrl } from "../shared";
 
 export default function Customer() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [customer, setCustomer] = useState();
+  const [notFound, setNotFound] = useState();
   useEffect(() => {
-    console.log("Working");
-    const url = "http://localhost:8000/api/customers/" + id;
+    const url = baseUrl + "api/customers/" + id;
     fetch(url)
       .then((response) => {
+        if (response.status === 404) {
+          //redirect to a 404 page (new URL)
+          // navigate("/404");
+          //render a 404 component in this page
+          setNotFound(true);
+        }
         return response.json();
       })
       .then((data) => {
@@ -17,6 +25,9 @@ export default function Customer() {
   }, []);
   return (
     <>
+      {notFound ? (
+        <p>The customer with id {id} you are looking for was not found</p>
+      ) : null}
       {customer ? (
         <div>
           <p>{customer.id}</p>
@@ -24,6 +35,30 @@ export default function Customer() {
           <p>{customer.industry}</p>
         </div>
       ) : null}
+
+      <button
+        onClick={(e) => {
+          const url = baseUrl + "api/customers" + id;
+          fetch(url, {
+            method: "DELETE",
+            headers: {
+              "Content-type": "application/json",
+            },
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Something went wrong");
+              }
+              navigate("/customers");
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+        }}
+      >
+        Delete
+      </button>
+      <br />
       <Link to={"/customers"}>Go back</Link>
     </>
   );
