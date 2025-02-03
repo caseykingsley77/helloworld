@@ -38,7 +38,7 @@ export default function Customer() {
 
       <button
         onClick={(e) => {
-          const url = baseUrl + "api/customers" + id;
+          const url = baseUrl + "api/customers/" + id;
           fetch(url, {
             method: "DELETE",
             headers: {

@@ -37,6 +37,8 @@ export default function Customers() {
       })
       .then((data) => {
         toggleShow();
+        console.log(data);
+        setCustomers([...customers, data.customer]);
       })
       .catch((e) => {
         console.log(e);
