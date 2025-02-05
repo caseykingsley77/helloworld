@@ -1,6 +1,6 @@
 import { use } from "react";
 import { useEffect, useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate, Link, useLocation } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import NotFound from "../components/NotFound";
 import DefinitionSearch from "../components/DefinitionSearch";
@@ -12,6 +12,8 @@ export default function Definition() {
   console.log(useParams());
   let { search } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+
   useEffect(() => {
     // const url = "https://httpstat.us/500";
     const url = "https://api.dictionaryapi.dev/api/v2/entries/en/" + search;
@@ -21,7 +23,11 @@ export default function Definition() {
         if (response.status === 404) {
           setNotFound(true);
         } else if (response.status === 401) {
-          navigate("/login");
+          navigate("/login", {
+            state: {
+              previousUrl: location.pathname,
+            },
+          });
         } else if (response.status === 500) {
           //   setServerError(true);
         }

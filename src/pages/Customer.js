@@ -1,4 +1,10 @@
-import { Link, useParams, useNavigate, IDLE_FETCHER } from "react-router-dom";
+import {
+  Link,
+  useParams,
+  useNavigate,
+  IDLE_FETCHER,
+  useLocation,
+} from "react-router-dom";
 import { useEffect, useState } from "react";
 import { baseUrl } from "../shared";
 
@@ -10,6 +16,7 @@ export default function Customer() {
   const [tempCustomer, setTempCustomer] = useState();
   const [changed, setChanged] = useState(false);
   const [error, setError] = useState();
+  const location = useLocation();
 
   useEffect(() => {
     if (!customer) return;
@@ -23,13 +30,24 @@ export default function Customer() {
 
   useEffect(() => {
     const url = baseUrl + "api/customers/" + id;
-    fetch(url)
+    fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("access"),
+      },
+    })
       .then((response) => {
         if (response.status === 404) {
           //redirect to a 404 page (new URL)
           // navigate("/404");
           //render a 404 component in this page
           setNotFound(true);
+        } else if (response.status === 401) {
+          navigate("/login", {
+            state: {
+              previousUrl: location.pathname,
+            },
+          });
         }
         if (!response.ok) {
           // console.log("response", response);
@@ -54,10 +72,18 @@ export default function Customer() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("access"),
       },
       body: JSON.stringify(tempCustomer),
     })
       .then((response) => {
+        if (response.status === 401) {
+          navigate("/login", {
+            state: {
+              previousUrl: location.pathname,
+            },
+          });
+        }
         // console.log(response);
         if (!response.ok) throw new Error("something went wrong");
         return response.json();
@@ -156,9 +182,17 @@ export default function Customer() {
                   method: "DELETE",
                   headers: {
                     "Content-type": "application/json",
+                    Authorization: "Bearer " + localStorage.getItem("access"),
                   },
                 })
                   .then((response) => {
+                    if (response.status === 401) {
+                      navigate("/login", {
+                        state: {
+                          previousUrl: location.pathname,
+                        },
+                      });
+                    }
                     if (!response.ok) {
                       throw new Error("Something went wrong");
                     }
