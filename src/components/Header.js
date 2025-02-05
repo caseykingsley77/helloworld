@@ -1,6 +1,8 @@
+import { useContext, useEffect } from "react";
 import { Disclosure, Menu } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { NavLink } from "react-router-dom";
+import { LoginContext } from "../App";
 
 const navigation = [
   { name: "Employees", href: "/" },
@@ -13,6 +15,8 @@ function classNames(...classes) {
 }
 
 export default function Header(props) {
+  const [loggedIn, setLoggedIn] = useContext(LoginContext);
+
   return (
     <>
       <Disclosure as="nav" className="bg-gray-800">
@@ -55,6 +59,26 @@ export default function Header(props) {
                           {item.name}
                         </NavLink>
                       ))}
+                      {loggedIn ? (
+                        <NavLink
+                          to={"/login"}
+                          onClick={() => {
+                            console.log("logging out...");
+                            setLoggedIn(false);
+                            localStorage.clear();
+                          }}
+                          className="block px-3 py-2 rounded-md text-base font-medium no-underline text-gray-300 hover:bg-gray-700 hover:text-white"
+                        >
+                          Logout
+                        </NavLink>
+                      ) : (
+                        <NavLink
+                          to={"login"}
+                          className="block px-3 py-2 rounded-md text-base font-medium no-underline text-gray-300 hover:bg-gray-700 hover:text-white"
+                        >
+                          Login
+                        </NavLink>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -91,6 +115,26 @@ export default function Header(props) {
                     {item.name}
                   </NavLink>
                 ))}
+                {loggedIn ? (
+                  <NavLink
+                    to={"/login"}
+                    onClick={() => {
+                      console.log("logging out...");
+                      setLoggedIn(false);
+                      localStorage.clear();
+                    }}
+                    className="block px-3 py-2 rounded-md text-base font-medium no-underline text-gray-300 hover:bg-gray-700 hover:text-white"
+                  >
+                    Logout
+                  </NavLink>
+                ) : (
+                  <NavLink
+                    to={"login"}
+                    className="block px-3 py-2 rounded-md text-base font-medium no-underline text-gray-300 hover:bg-gray-700 hover:text-white"
+                  >
+                    Login
+                  </NavLink>
+                )}
               </div>
             </Disclosure.Panel>
           </>
